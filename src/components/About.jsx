@@ -47,14 +47,14 @@ export default function About() {
                 <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-tr from-sand to-sand-300 p-1 shadow-sm">
                   <div className="w-full h-full rounded-[14px] bg-canvas overflow-hidden flex items-center justify-center relative">
                     <img
-                      src="/profile.jpg"
+                      src="/profile.png"
                       alt="Moazam Ali"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.style.display = 'none';
                         e.target.nextSibling.style.display = 'flex';
                       }}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-top"
                     />
                     {/* Fallback Monogram Avatar */}
                     <div className="w-full h-full bg-sand-100 items-center justify-center text-burgundy font-serif font-bold text-2xl hidden flex-col">
