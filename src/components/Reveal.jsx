@@ -1,37 +1,45 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 
-export default function Reveal({ children, className = '', delay = 0 }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef(null);
+const revealVariants = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(4px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+};
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px',
-      }
-    );
+export default function Reveal({
+  children,
+  className = '',
+  delay = 0,
+  direction = 'up',
+}) {
+  const reduceMotion = useReducedMotion();
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const hidden = reduceMotion
+    ? { opacity: 0 }
+    : {
+        ...revealVariants.hidden,
+        ...(direction === 'left' ? { x: -28, y: 0 } : {}),
+        ...(direction === 'right' ? { x: 28, y: 0 } : {}),
+        ...(direction === 'down' ? { y: -28 } : {}),
+      };
 
   return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`reveal-init ${isVisible ? 'reveal-visible' : ''} ${className}`}
+    <motion.div
+      initial={hidden}
+      whileInView={revealVariants.visible}
+      viewport={{ once: true, amount: 0.16, margin: '0px 0px -48px 0px' }}
+      transition={
+        reduceMotion
+          ? { duration: 0.01 }
+          : {
+              duration: 0.72,
+              delay: delay / 1000,
+              ease: [0.16, 1, 0.3, 1],
+            }
+      }
+      className={className}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }
