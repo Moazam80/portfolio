@@ -6,7 +6,7 @@ import Reveal from './Reveal';
 
 export default function Contact() {
   // Convert the saved Pakistani mobile number to WhatsApp's international format.
-  const whatsappNumber = `92${personalInfo.phone.replace(/\\D/g, '').replace(/^0/, '')}`;
+  const whatsappNumber = `92${personalInfo.phone.replace(/\D/g, '').replace(/^0/, '')}`;
   const whatsappMessage = encodeURIComponent(
     "Hi Moazam! I visited your portfolio and would like to discuss an opportunity with you."
   );
