@@ -1,23 +1,10 @@
 import React from 'react';
-import { Mail, Phone, MapPin, MessageCircle, Copy, CheckCircle2 } from 'lucide-react';
-import { useState } from 'react';
+import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 import Reveal from './Reveal';
 
 export default function Contact() {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(personalInfo.email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  };
-
   // Convert the saved Pakistani mobile number to WhatsApp's international format.
   const whatsappNumber = `92${personalInfo.phone.replace(/\\D/g, '').replace(/^0/, '')}`;
   const whatsappMessage = encodeURIComponent(
@@ -31,7 +18,7 @@ export default function Contact() {
         <Reveal>
           <div className="space-y-3 mb-14">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-100 text-burgundy text-xs font-mono font-semibold border border-sand-200">
-              <Mail className="w-3.5 h-3.5" />
+              <MessageCircle className="w-3.5 h-3.5" />
               <span>06 // Connect & Collaborate</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
@@ -49,19 +36,6 @@ export default function Contact() {
               <div className="h-full p-7 rounded-2xl bg-white border border-sand-200 shadow-subtle space-y-6">
                 <h3 className="text-lg font-bold text-charcoal">Direct Contact</h3>
                 <div className="space-y-3 text-xs font-mono">
-                  <div className="p-4 rounded-xl bg-canvas border border-sand-200 flex items-center justify-between group hover:border-burgundy/40 transition-colors">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="p-2 rounded-lg bg-sand-100 text-burgundy"><Mail className="w-4 h-4" /></div>
-                      <div className="min-w-0">
-                        <div className="text-charcoal-soft text-[10px]">EMAIL ADDRESS</div>
-                        <div className="text-charcoal font-semibold break-all">{personalInfo.email}</div>
-                      </div>
-                    </div>
-                    <button onClick={handleCopyEmail} className="ml-2 p-2 rounded-lg bg-white border border-sand-200 hover:bg-sand-50 text-charcoal transition-all" title="Copy Email">
-                      {copied ? <CheckCircle2 className="w-4 h-4 text-burgundy" /> : <Copy className="w-4 h-4" />}
-                    </button>
-                  </div>
-
                   <div className="p-4 rounded-xl bg-canvas border border-sand-200 flex items-center justify-between group hover:border-burgundy/40 transition-colors">
                     <div className="flex items-center gap-3">
                       <div className="p-2 rounded-lg bg-sand-100 text-burgundy"><Phone className="w-4 h-4" /></div>
