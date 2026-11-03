@@ -46,6 +46,33 @@ export default {
         'subtle': '0 4px 20px -2px rgba(89, 9, 7, 0.05)',
         'elevated': '0 10px 30px -4px rgba(89, 9, 7, 0.08)',
         'burgundy': '0 10px 25px -3px rgba(89, 9, 7, 0.25)',
+        'glow-sand': '0 0 25px -5px rgba(232, 210, 181, 0.5)',
+      },
+      animation: {
+        'float': 'float 4s ease-in-out infinite',
+        'float-slow': 'float 6s ease-in-out infinite',
+        'float-delayed': 'float-delayed 4s ease-in-out 2s infinite',
+        'pulse-glow': 'pulse-glow 2.5s ease-in-out infinite',
+        'shimmer': 'shimmer 2.5s ease-in-out infinite',
+        'spin-slow': 'spin 12s linear infinite',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-8px)' },
+        },
+        'float-delayed': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
+        'pulse-glow': {
+          '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+          '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+        },
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(200%)' },
+        }
       }
     },
   },

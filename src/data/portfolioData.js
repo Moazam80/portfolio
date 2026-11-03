@@ -9,8 +9,8 @@ export const personalInfo = {
   university: "Bahauddin Zakariya University (BZU), Multan",
   degree: "Bachelor of Science in Computer Engineering",
   semester: "3rd Semester",
-  github: "https://github.com/moazamali-dev",
-  linkedin: "https://linkedin.com/in/moazam-ali-dev",
+  github: "https://github.com/moazam80",
+  linkedin: "https://linkedin.com/in/moazam-ali-501035330",
 };
 
 export const stats = [

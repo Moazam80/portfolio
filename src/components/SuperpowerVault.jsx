@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Sparkles, Terminal, Volume2, VolumeX, Check, ArrowRight, ShieldCheck, Gift } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { superpowers } from '../data/portfolioData';
+import Reveal from './Reveal';
 
 // Web Audio API synthesizer for retro chimes (zero external assets, zero 404s!)
 const playSound = (type, soundEnabled) => {
@@ -100,180 +101,186 @@ export default function SuperpowerVault() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-100 text-burgundy text-xs font-mono font-semibold border border-sand-200">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>05 // Interactive Creative Feature</span>
+        <Reveal>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-100 text-burgundy text-xs font-mono font-semibold border border-sand-200">
+                <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
+                <span>05 // Interactive Creative Feature</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
+                The Superpower Vault & Interactive CLI
+              </h2>
+              <p className="text-charcoal-muted text-sm sm:text-base max-w-xl leading-relaxed">
+                An interactive experience revealing personal engineering origin stories and a lightweight cloud terminal.
+              </p>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
-              The Superpower Vault & Interactive CLI
-            </h2>
-            <p className="text-charcoal-muted text-sm sm:text-base max-w-xl leading-relaxed">
-              An interactive experience revealing personal engineering origin stories and a lightweight cloud terminal.
-            </p>
-          </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setSoundEnabled(!soundEnabled)}
-              className="p-2.5 rounded-xl bg-white border border-sand-200 text-charcoal-muted hover:text-burgundy transition-colors text-xs flex items-center gap-1.5"
-              title={soundEnabled ? "Mute audio" : "Enable audio"}
-            >
-              {soundEnabled ? <Volume2 className="w-4 h-4 text-burgundy" /> : <VolumeX className="w-4 h-4 text-charcoal-soft" />}
-              <span className="font-mono text-[11px]">{soundEnabled ? "Audio On" : "Muted"}</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setSoundEnabled(!soundEnabled)}
+                className="p-2.5 rounded-xl bg-white border border-sand-200 text-charcoal-muted hover:text-burgundy hover:border-burgundy/30 transition-all text-xs flex items-center gap-1.5 shadow-subtle hover:scale-105"
+                title={soundEnabled ? "Mute audio" : "Enable audio"}
+              >
+                {soundEnabled ? <Volume2 className="w-4 h-4 text-burgundy" /> : <VolumeX className="w-4 h-4 text-charcoal-soft" />}
+                <span className="font-mono text-[11px]">{soundEnabled ? "Audio On" : "Muted"}</span>
+              </button>
+            </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Tab switchers: Vault Cards vs Interactive Shell */}
-        <div className="flex gap-2 mb-6">
-          <button
-            onClick={() => setActiveTab('vault')}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all ${
-              activeTab === 'vault'
-                ? 'bg-burgundy text-white shadow-burgundy'
-                : 'bg-white text-charcoal-muted hover:text-charcoal border border-sand-200'
-            }`}
-          >
-            Superpower Capsules
-          </button>
-          <button
-            onClick={() => setActiveTab('cli')}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all ${
-              activeTab === 'cli'
-                ? 'bg-burgundy text-white shadow-burgundy'
-                : 'bg-white text-charcoal-muted hover:text-charcoal border border-sand-200'
-            }`}
-          >
-            Interactive DevOps Shell
-          </button>
-        </div>
+        <Reveal delay={100}>
+          <div className="flex gap-2 mb-6">
+            <button
+              onClick={() => setActiveTab('vault')}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all duration-300 ${
+                activeTab === 'vault'
+                  ? 'bg-burgundy text-white shadow-burgundy scale-105'
+                  : 'bg-white text-charcoal-muted hover:text-charcoal border border-sand-200'
+              }`}
+            >
+              Superpower Capsules
+            </button>
+            <button
+              onClick={() => setActiveTab('cli')}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all duration-300 ${
+                activeTab === 'cli'
+                  ? 'bg-burgundy text-white shadow-burgundy scale-105'
+                  : 'bg-white text-charcoal-muted hover:text-charcoal border border-sand-200'
+              }`}
+            >
+              Interactive DevOps Shell
+            </button>
+          </div>
+        </Reveal>
 
         {/* Main Vault Panel */}
-        <div className="p-7 sm:p-10 rounded-3xl bg-white border border-sand-200 shadow-subtle">
-          
-          {activeTab === 'vault' ? (
-            <div className="grid lg:grid-cols-12 gap-8 items-start">
-              
-              {/* Left Column: Capsule Selector List */}
-              <div className="lg:col-span-5 space-y-3">
-                <div className="text-xs font-mono uppercase text-charcoal-soft tracking-wider mb-2">
-                  Select a capsule to inspect:
-                </div>
-                {superpowers.map((sp) => {
-                  const isSelected = activeCapsule.id === sp.id;
-                  const isUnlocked = unlockedIds.includes(sp.id);
-                  return (
-                    <div
-                      key={sp.id}
-                      onClick={() => handleSelectSuperpower(sp)}
-                      className={`p-4 rounded-2xl cursor-pointer transition-all border flex items-center justify-between ${
-                        isSelected
-                          ? 'bg-sand-50 border-burgundy shadow-sm'
-                          : 'bg-canvas border-sand-200 hover:border-sand-300'
-                      }`}
-                    >
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono font-bold px-2 py-0.2 rounded bg-sand-100 text-burgundy">
-                            {sp.tag}
-                          </span>
-                          <span className="font-bold text-sm text-charcoal">{sp.title}</span>
-                        </div>
-                        <div className="text-xs text-charcoal-muted line-clamp-1">{sp.subtitle}</div>
-                      </div>
-
-                      <div className="shrink-0 pl-2">
-                        {isUnlocked ? (
-                          <div className="w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center">
-                            <Check className="w-3.5 h-3.5" />
-                          </div>
-                        ) : (
-                          <div className="w-6 h-6 rounded-full bg-sand-100 text-charcoal-soft flex items-center justify-center text-[10px] font-mono">
-                            ?
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Right Column: Active Capsule Detailed View */}
-              <div className="lg:col-span-7 p-7 sm:p-8 rounded-2xl bg-canvas border border-sand-200 space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-0.5 rounded-full bg-sand-100 text-burgundy border border-sand-200">
-                    {activeCapsule.tag} SUPERPOWER
-                  </span>
-                  <span className="text-xs font-mono text-charcoal-soft">
-                    Capsule #{activeCapsule.id}
-                  </span>
-                </div>
-
-                <h3 className="text-2xl font-bold text-charcoal">
-                  {activeCapsule.title}
-                </h3>
-
-                <div className="text-xs font-mono text-burgundy font-semibold">
-                  {activeCapsule.subtitle}
-                </div>
-
-                <p className="text-sm text-charcoal-muted leading-relaxed">
-                  {activeCapsule.story}
-                </p>
-
-                <div className="p-4 rounded-xl bg-white border border-sand-200 text-xs italic text-charcoal font-serif">
-                  {activeCapsule.quote}
-                </div>
-
-                <div className="pt-2 flex items-center justify-between text-xs font-mono text-charcoal-soft">
-                  <span>Capsules Discovered: {unlockedIds.length} / {superpowers.length}</span>
-                  <span className="text-burgundy font-semibold">Non-intrusive interactive design</span>
-                </div>
-              </div>
-
-            </div>
-          ) : (
-            /* Tab 2: Interactive Terminal Shell */
-            <div className="space-y-3 font-mono text-xs">
-              <div className="p-5 rounded-2xl bg-charcoal text-canvas min-h-[240px] max-h-[320px] overflow-y-auto space-y-2">
-                {cliLogs.map((log, idx) => (
-                  <div key={idx} className="whitespace-pre-wrap leading-relaxed">
-                    {log.startsWith("moazam@aws") ? (
-                      <span className="text-sand-300 font-bold">{log}</span>
-                    ) : log.startsWith("ACCESS GRANTED") ? (
-                      <span className="text-emerald-400 font-bold">{log}</span>
-                    ) : (
-                      <span className="text-slate-300">{log}</span>
-                    )}
+        <Reveal delay={150}>
+          <div className="p-7 sm:p-10 rounded-3xl bg-white border border-sand-200 shadow-subtle">
+            
+            {activeTab === 'vault' ? (
+              <div className="grid lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Left Column: Capsule Selector List */}
+                <div className="lg:col-span-5 space-y-3">
+                  <div className="text-xs font-mono uppercase text-charcoal-soft tracking-wider mb-2">
+                    Select a capsule to inspect:
                   </div>
-                ))}
-                <div ref={cliBottomRef} />
-              </div>
+                  {superpowers.map((sp) => {
+                    const isSelected = activeCapsule.id === sp.id;
+                    const isUnlocked = unlockedIds.includes(sp.id);
+                    return (
+                      <div
+                        key={sp.id}
+                        onClick={() => handleSelectSuperpower(sp)}
+                        className={`p-4 rounded-2xl cursor-pointer transition-all duration-300 border flex items-center justify-between ${
+                          isSelected
+                            ? 'bg-sand-50 border-burgundy shadow-elevated -translate-y-0.5'
+                            : 'bg-canvas border-sand-200 hover:border-sand-300 hover:bg-white'
+                        }`}
+                      >
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-bold px-2 py-0.2 rounded bg-sand-100 text-burgundy">
+                              {sp.tag}
+                            </span>
+                            <span className="font-bold text-sm text-charcoal">{sp.title}</span>
+                          </div>
+                          <div className="text-xs text-charcoal-muted line-clamp-1">{sp.subtitle}</div>
+                        </div>
 
-              <form onSubmit={handleCliSubmit} className="flex gap-2">
-                <div className="relative flex-1">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-burgundy font-bold">$</span>
-                  <input
-                    type="text"
-                    value={cliInput}
-                    onChange={(e) => setCliInput(e.target.value)}
-                    placeholder="Type 'help', 'aws s3 ls', or 'sudo hire-moazam'..."
-                    className="w-full bg-white border border-sand-200 rounded-xl pl-8 pr-4 py-2.5 text-xs text-charcoal placeholder-charcoal-soft focus:outline-none focus:border-burgundy font-mono"
-                  />
+                        <div className="shrink-0 pl-2">
+                          {isUnlocked ? (
+                            <div className="w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center animate-in zoom-in-50 duration-300">
+                              <Check className="w-3.5 h-3.5" />
+                            </div>
+                          ) : (
+                            <div className="w-6 h-6 rounded-full bg-sand-100 text-charcoal-soft flex items-center justify-center text-[10px] font-mono">
+                              ?
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-                <button
-                  type="submit"
-                  className="px-4 py-2.5 rounded-xl bg-burgundy hover:bg-burgundy-600 text-white font-semibold text-xs"
-                >
-                  Execute
-                </button>
-              </form>
-            </div>
-          )}
 
-        </div>
+                {/* Right Column: Active Capsule Detailed View */}
+                <div className="lg:col-span-7 p-7 sm:p-8 rounded-2xl bg-canvas border border-sand-200 space-y-4 transition-all duration-300 shadow-inner">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-0.5 rounded-full bg-sand-100 text-burgundy border border-sand-200">
+                      {activeCapsule.tag} SUPERPOWER
+                    </span>
+                    <span className="text-xs font-mono text-charcoal-soft">
+                      Capsule #{activeCapsule.id}
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl font-bold text-charcoal">
+                    {activeCapsule.title}
+                  </h3>
+
+                  <div className="text-xs font-mono text-burgundy font-semibold">
+                    {activeCapsule.subtitle}
+                  </div>
+
+                  <p className="text-sm text-charcoal-muted leading-relaxed">
+                    {activeCapsule.story}
+                  </p>
+
+                  <div className="p-4 rounded-xl bg-white border border-sand-200 text-xs italic text-charcoal font-serif">
+                    {activeCapsule.quote}
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-between text-xs font-mono text-charcoal-soft">
+                    <span>Capsules Discovered: {unlockedIds.length} / {superpowers.length}</span>
+                    <span className="text-burgundy font-semibold">Non-intrusive interactive design</span>
+                  </div>
+                </div>
+
+              </div>
+            ) : (
+              /* Tab 2: Interactive Terminal Shell */
+              <div className="space-y-3 font-mono text-xs">
+                <div className="p-5 rounded-2xl bg-charcoal text-canvas min-h-[240px] max-h-[320px] overflow-y-auto space-y-2 shadow-inner">
+                  {cliLogs.map((log, idx) => (
+                    <div key={idx} className="whitespace-pre-wrap leading-relaxed">
+                      {log.startsWith("moazam@aws") ? (
+                        <span className="text-sand-300 font-bold">{log}</span>
+                      ) : log.startsWith("ACCESS GRANTED") ? (
+                        <span className="text-emerald-400 font-bold">{log}</span>
+                      ) : (
+                        <span className="text-slate-300">{log}</span>
+                      )}
+                    </div>
+                  ))}
+                  <div ref={cliBottomRef} />
+                </div>
+
+                <form onSubmit={handleCliSubmit} className="flex gap-2">
+                  <div className="relative flex-1">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-burgundy font-bold">$</span>
+                    <input
+                      type="text"
+                      value={cliInput}
+                      onChange={(e) => setCliInput(e.target.value)}
+                      placeholder="Type 'help', 'aws s3 ls', or 'sudo hire-moazam'..."
+                      className="w-full bg-white border border-sand-200 rounded-xl pl-8 pr-4 py-2.5 text-xs text-charcoal placeholder-charcoal-soft focus:outline-none focus:border-burgundy font-mono transition-colors"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn-shimmer px-4 py-2.5 rounded-xl bg-burgundy hover:bg-burgundy-600 text-white font-semibold text-xs transition-all hover:scale-105"
+                  >
+                    Execute
+                  </button>
+                </form>
+              </div>
+            )}
+
+          </div>
+        </Reveal>
 
       </div>
     </section>
