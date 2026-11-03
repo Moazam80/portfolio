@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FolderGit2, Check, ArrowUpRight } from 'lucide-react';
 import { GithubIcon } from './Icons';
 import { projectsData } from '../data/portfolioData';
-import Reveal from './Reveal';
 
 export default function Projects() {
   const [filter, setFilter] = useState("All");
@@ -18,54 +18,87 @@ export default function Projects() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <Reveal>
-          <div className="space-y-3 mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-100 text-burgundy text-xs font-mono font-semibold border border-sand-200">
-              <FolderGit2 className="w-3.5 h-3.5" />
-              <span>03 // Projects & Achievements</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
-              Featured Engineering & Cloud Deployments
-            </h2>
-            <p className="text-charcoal-muted text-sm sm:text-base max-w-2xl leading-relaxed">
-              Real-world systems containerized with Docker, automated with Linux pipelines, and deployed to AWS.
-            </p>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="space-y-3 mb-12"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-100 text-burgundy text-xs font-mono font-semibold border border-sand-200">
+            <FolderGit2 className="w-3.5 h-3.5" />
+            <span>03 // Projects & Achievements</span>
           </div>
-        </Reveal>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
+            Featured Engineering & Cloud Deployments
+          </h2>
+          <p className="text-charcoal-muted text-sm sm:text-base max-w-2xl leading-relaxed">
+            Real-world systems containerized with Docker, automated with Linux pipelines, and deployed to AWS.
+          </p>
+        </motion.div>
 
-        {/* Minimal Filters */}
-        <Reveal delay={100}>
-          <div className="flex flex-wrap gap-2 mb-10">
-            {categories.map((cat) => (
+        {/* Minimal Filters with Gliding Animated Pill */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="flex flex-wrap gap-2 mb-10"
+        >
+          {categories.map((cat) => {
+            const isActive = filter === cat;
+            return (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 ${
-                  filter === cat
-                    ? 'bg-burgundy text-white shadow-burgundy scale-105'
-                    : 'bg-white text-charcoal-muted hover:text-charcoal border border-sand-200 hover:bg-sand-50'
+                className={`relative px-4 py-2 rounded-xl text-xs font-semibold transition-colors duration-200 ${
+                  isActive
+                    ? 'text-white'
+                    : 'text-charcoal-muted hover:text-charcoal bg-white border border-sand-200 hover:bg-sand-50'
                 }`}
               >
-                {cat}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeProjectFilter"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    className="absolute inset-0 bg-burgundy rounded-xl shadow-burgundy -z-0"
+                  />
+                )}
+                <span className="relative z-10">{cat}</span>
               </button>
-            ))}
-          </div>
-        </Reveal>
+            );
+          })}
+        </motion.div>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {filteredProjects.map((project, idx) => (
-            <Reveal key={project.id} delay={idx * 120}>
-              <div
-                className="p-7 sm:p-8 rounded-2xl bg-white border border-sand-200 shadow-subtle hover:border-burgundy/40 hover:shadow-elevated hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between group h-full"
+        {/* Projects Grid with AnimatePresence */}
+        <motion.div layout className="grid md:grid-cols-2 gap-8">
+          <AnimatePresence>
+            {filteredProjects.map((project, idx) => (
+              <motion.div
+                layout
+                key={project.id}
+                initial={{ opacity: 0, y: 35, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.25 } }}
+                transition={{ duration: 0.5, delay: idx * 0.1, type: "spring", stiffness: 120 }}
+                whileHover={{
+                  y: -10,
+                  scale: 1.02,
+                  borderColor: '#590907',
+                  boxShadow: '0 20px 40px -10px rgba(89, 9, 7, 0.18)',
+                }}
+                className="p-7 sm:p-8 rounded-2xl bg-white border border-sand-200 shadow-subtle flex flex-col justify-between group h-full cursor-pointer transition-colors"
               >
                 <div>
                   
                   {/* Header Badge */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-sand-100 text-burgundy font-semibold border border-sand-200 group-hover:bg-sand-200/80 transition-colors">
+                    <motion.span
+                      whileHover={{ scale: 1.06 }}
+                      className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-sand-100 text-burgundy font-semibold border border-sand-200 group-hover:bg-sand-200 transition-colors"
+                    >
                       {project.badge}
-                    </span>
+                    </motion.span>
                     <span className="text-xs font-mono text-charcoal-soft">
                       {project.category}
                     </span>
@@ -98,12 +131,13 @@ export default function Projects() {
                 <div className="mt-8 pt-5 border-t border-sand-100 space-y-4">
                   <div className="flex flex-wrap gap-1.5">
                     {project.tech.map((t, i) => (
-                      <span
+                      <motion.span
                         key={i}
-                        className="text-[11px] font-mono px-2 py-0.5 rounded bg-sand-50 text-charcoal border border-sand-200 hover:border-burgundy/30 transition-colors"
+                        whileHover={{ scale: 1.08, borderColor: '#590907' }}
+                        className="text-[11px] font-mono px-2 py-0.5 rounded bg-sand-50 text-charcoal border border-sand-200 transition-colors"
                       >
                         {t}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
 
@@ -116,15 +150,15 @@ export default function Projects() {
                     >
                       <GithubIcon className="w-4 h-4 text-charcoal-muted group-hover/link:text-burgundy transition-colors" />
                       <span>View GitHub Repository</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-charcoal-soft group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-hover/link:text-burgundy transition-transform duration-300" />
+                      <ArrowUpRight className="w-3.5 h-3.5 text-charcoal-soft group-hover/link:translate-x-1.5 group-hover/link:-translate-y-1.5 group-hover/link:text-burgundy transition-transform duration-200" />
                     </a>
                   </div>
                 </div>
 
-              </div>
-            </Reveal>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
       </div>
     </section>

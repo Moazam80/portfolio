@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Terminal, Volume2, VolumeX, Check, ArrowRight, ShieldCheck, Gift } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { superpowers } from '../data/portfolioData';
-import Reveal from './Reveal';
 
 // Web Audio API synthesizer for retro chimes (zero external assets, zero 404s!)
 const playSound = (type, soundEnabled) => {
@@ -56,8 +56,8 @@ export default function SuperpowerVault() {
       setUnlockedIds([...unlockedIds, sp.id]);
       playSound('unlock', soundEnabled);
       confetti({
-        particleCount: 50,
-        spread: 60,
+        particleCount: 60,
+        spread: 70,
         origin: { y: 0.7 },
         colors: ['#590907', '#E8D2B5', '#1C1917', '#B88455'],
       });
@@ -82,7 +82,7 @@ export default function SuperpowerVault() {
       response = "AWS (Amplify, S3, CloudFront, EC2, IAM) | Docker | Linux | CI/CD | Bash | Networking";
     } else if (cmd === 'sudo hire-moazam') {
       playSound('unlock', soundEnabled);
-      confetti({ particleCount: 100, spread: 90, origin: { y: 0.6 } });
+      confetti({ particleCount: 120, spread: 100, origin: { y: 0.6 } });
       response = "ACCESS GRANTED: Excellent decision! Let's build scalable cloud infrastructure together! Contact: moazamali517500@gmail.com";
     } else if (cmd === 'clear') {
       setCliLogs([]);
@@ -101,113 +101,152 @@ export default function SuperpowerVault() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <Reveal>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-100 text-burgundy text-xs font-mono font-semibold border border-sand-200">
-                <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
-                <span>05 // Interactive Creative Feature</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
-                The Superpower Vault & Interactive CLI
-              </h2>
-              <p className="text-charcoal-muted text-sm sm:text-base max-w-xl leading-relaxed">
-                An interactive experience revealing personal engineering origin stories and a lightweight cloud terminal.
-              </p>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12"
+        >
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-100 text-burgundy text-xs font-mono font-semibold border border-sand-200">
+              <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
+              <span>05 // Interactive Creative Feature</span>
             </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setSoundEnabled(!soundEnabled)}
-                className="p-2.5 rounded-xl bg-white border border-sand-200 text-charcoal-muted hover:text-burgundy hover:border-burgundy/30 transition-all text-xs flex items-center gap-1.5 shadow-subtle hover:scale-105"
-                title={soundEnabled ? "Mute audio" : "Enable audio"}
-              >
-                {soundEnabled ? <Volume2 className="w-4 h-4 text-burgundy" /> : <VolumeX className="w-4 h-4 text-charcoal-soft" />}
-                <span className="font-mono text-[11px]">{soundEnabled ? "Audio On" : "Muted"}</span>
-              </button>
-            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
+              The Superpower Vault & Interactive CLI
+            </h2>
+            <p className="text-charcoal-muted text-sm sm:text-base max-w-xl leading-relaxed">
+              An interactive experience revealing personal engineering origin stories and a lightweight cloud terminal.
+            </p>
           </div>
-        </Reveal>
 
-        {/* Tab switchers: Vault Cards vs Interactive Shell */}
-        <Reveal delay={100}>
-          <div className="flex gap-2 mb-6">
-            <button
-              onClick={() => setActiveTab('vault')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all duration-300 ${
-                activeTab === 'vault'
-                  ? 'bg-burgundy text-white shadow-burgundy scale-105'
-                  : 'bg-white text-charcoal-muted hover:text-charcoal border border-sand-200'
-              }`}
+          <div className="flex items-center gap-2">
+            <motion.button
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              className="p-2.5 rounded-xl bg-white border border-sand-200 text-charcoal-muted hover:text-burgundy hover:border-burgundy/30 transition-all text-xs flex items-center gap-1.5 shadow-subtle"
+              title={soundEnabled ? "Mute audio" : "Enable audio"}
             >
-              Superpower Capsules
-            </button>
-            <button
-              onClick={() => setActiveTab('cli')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all duration-300 ${
-                activeTab === 'cli'
-                  ? 'bg-burgundy text-white shadow-burgundy scale-105'
-                  : 'bg-white text-charcoal-muted hover:text-charcoal border border-sand-200'
-              }`}
-            >
-              Interactive DevOps Shell
-            </button>
+              {soundEnabled ? <Volume2 className="w-4 h-4 text-burgundy" /> : <VolumeX className="w-4 h-4 text-charcoal-soft" />}
+              <span className="font-mono text-[11px]">{soundEnabled ? "Audio On" : "Muted"}</span>
+            </motion.button>
           </div>
-        </Reveal>
+        </motion.div>
+
+        {/* Tab switchers with animated sliding pill */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setActiveTab('vault')}
+            className={`relative px-4 py-2.5 rounded-xl text-xs font-semibold font-mono transition-colors duration-200 ${
+              activeTab === 'vault'
+                ? 'text-white'
+                : 'text-charcoal-muted hover:text-charcoal bg-white border border-sand-200'
+            }`}
+          >
+            {activeTab === 'vault' && (
+              <motion.div
+                layoutId="activeVaultTab"
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                className="absolute inset-0 bg-burgundy rounded-xl shadow-burgundy -z-0"
+              />
+            )}
+            <span className="relative z-10">Superpower Capsules</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('cli')}
+            className={`relative px-4 py-2.5 rounded-xl text-xs font-semibold font-mono transition-colors duration-200 ${
+              activeTab === 'cli'
+                ? 'text-white'
+                : 'text-charcoal-muted hover:text-charcoal bg-white border border-sand-200'
+            }`}
+          >
+            {activeTab === 'cli' && (
+              <motion.div
+                layoutId="activeVaultTab"
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                className="absolute inset-0 bg-burgundy rounded-xl shadow-burgundy -z-0"
+              />
+            )}
+            <span className="relative z-10">Interactive DevOps Shell</span>
+          </button>
+        </div>
 
         {/* Main Vault Panel */}
-        <Reveal delay={150}>
-          <div className="p-7 sm:p-10 rounded-3xl bg-white border border-sand-200 shadow-subtle">
-            
-            {activeTab === 'vault' ? (
-              <div className="grid lg:grid-cols-12 gap-8 items-start">
-                
-                {/* Left Column: Capsule Selector List */}
-                <div className="lg:col-span-5 space-y-3">
-                  <div className="text-xs font-mono uppercase text-charcoal-soft tracking-wider mb-2">
-                    Select a capsule to inspect:
-                  </div>
-                  {superpowers.map((sp) => {
-                    const isSelected = activeCapsule.id === sp.id;
-                    const isUnlocked = unlockedIds.includes(sp.id);
-                    return (
-                      <div
-                        key={sp.id}
-                        onClick={() => handleSelectSuperpower(sp)}
-                        className={`p-4 rounded-2xl cursor-pointer transition-all duration-300 border flex items-center justify-between ${
-                          isSelected
-                            ? 'bg-sand-50 border-burgundy shadow-elevated -translate-y-0.5'
-                            : 'bg-canvas border-sand-200 hover:border-sand-300 hover:bg-white'
-                        }`}
-                      >
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono font-bold px-2 py-0.2 rounded bg-sand-100 text-burgundy">
-                              {sp.tag}
-                            </span>
-                            <span className="font-bold text-sm text-charcoal">{sp.title}</span>
-                          </div>
-                          <div className="text-xs text-charcoal-muted line-clamp-1">{sp.subtitle}</div>
-                        </div>
-
-                        <div className="shrink-0 pl-2">
-                          {isUnlocked ? (
-                            <div className="w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center animate-in zoom-in-50 duration-300">
-                              <Check className="w-3.5 h-3.5" />
-                            </div>
-                          ) : (
-                            <div className="w-6 h-6 rounded-full bg-sand-100 text-charcoal-soft flex items-center justify-center text-[10px] font-mono">
-                              ?
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="p-7 sm:p-10 rounded-3xl bg-white border border-sand-200 shadow-subtle"
+        >
+          
+          {activeTab === 'vault' ? (
+            <div className="grid lg:grid-cols-12 gap-8 items-start">
+              
+              {/* Left Column: Capsule Selector List */}
+              <div className="lg:col-span-5 space-y-3">
+                <div className="text-xs font-mono uppercase text-charcoal-soft tracking-wider mb-2">
+                  Select a capsule to inspect:
                 </div>
+                {superpowers.map((sp) => {
+                  const isSelected = activeCapsule.id === sp.id;
+                  const isUnlocked = unlockedIds.includes(sp.id);
+                  return (
+                    <motion.div
+                      key={sp.id}
+                      onClick={() => handleSelectSuperpower(sp)}
+                      whileHover={{ y: -4, scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                      className={`relative p-4 rounded-2xl cursor-pointer border flex items-center justify-between transition-colors duration-200 ${
+                        isSelected
+                          ? 'bg-sand-50/90 border-burgundy shadow-elevated'
+                          : 'bg-canvas border-sand-200 hover:border-sand-300'
+                      }`}
+                    >
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono font-bold px-2 py-0.2 rounded bg-sand-100 text-burgundy">
+                            {sp.tag}
+                          </span>
+                          <span className="font-bold text-sm text-charcoal">{sp.title}</span>
+                        </div>
+                        <div className="text-xs text-charcoal-muted line-clamp-1">{sp.subtitle}</div>
+                      </div>
 
-                {/* Right Column: Active Capsule Detailed View */}
-                <div className="lg:col-span-7 p-7 sm:p-8 rounded-2xl bg-canvas border border-sand-200 space-y-4 transition-all duration-300 shadow-inner">
+                      <div className="shrink-0 pl-2">
+                        {isUnlocked ? (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="w-6 h-6 rounded-full bg-burgundy/10 text-burgundy flex items-center justify-center font-bold"
+                          >
+                            <Check className="w-3.5 h-3.5" />
+                          </motion.div>
+                        ) : (
+                          <div className="w-6 h-6 rounded-full bg-sand-100 text-charcoal-soft flex items-center justify-center text-[10px] font-mono">
+                            ?
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              {/* Right Column: Active Capsule Detailed View */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeCapsule.id}
+                  initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.97 }}
+                  transition={{ duration: 0.35, type: "spring", bounce: 0.2 }}
+                  className="lg:col-span-7 p-7 sm:p-8 rounded-2xl bg-canvas border border-sand-200 space-y-4 shadow-inner"
+                >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-0.5 rounded-full bg-sand-100 text-burgundy border border-sand-200">
                       {activeCapsule.tag} SUPERPOWER
@@ -237,50 +276,58 @@ export default function SuperpowerVault() {
                     <span>Capsules Discovered: {unlockedIds.length} / {superpowers.length}</span>
                     <span className="text-burgundy font-semibold">Non-intrusive interactive design</span>
                   </div>
-                </div>
+                </motion.div>
+              </AnimatePresence>
 
-              </div>
-            ) : (
-              /* Tab 2: Interactive Terminal Shell */
-              <div className="space-y-3 font-mono text-xs">
-                <div className="p-5 rounded-2xl bg-charcoal text-canvas min-h-[240px] max-h-[320px] overflow-y-auto space-y-2 shadow-inner">
-                  {cliLogs.map((log, idx) => (
-                    <div key={idx} className="whitespace-pre-wrap leading-relaxed">
-                      {log.startsWith("moazam@aws") ? (
-                        <span className="text-sand-300 font-bold">{log}</span>
-                      ) : log.startsWith("ACCESS GRANTED") ? (
-                        <span className="text-emerald-400 font-bold">{log}</span>
-                      ) : (
-                        <span className="text-slate-300">{log}</span>
-                      )}
-                    </div>
-                  ))}
-                  <div ref={cliBottomRef} />
-                </div>
-
-                <form onSubmit={handleCliSubmit} className="flex gap-2">
-                  <div className="relative flex-1">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-burgundy font-bold">$</span>
-                    <input
-                      type="text"
-                      value={cliInput}
-                      onChange={(e) => setCliInput(e.target.value)}
-                      placeholder="Type 'help', 'aws s3 ls', or 'sudo hire-moazam'..."
-                      className="w-full bg-white border border-sand-200 rounded-xl pl-8 pr-4 py-2.5 text-xs text-charcoal placeholder-charcoal-soft focus:outline-none focus:border-burgundy font-mono transition-colors"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn-shimmer px-4 py-2.5 rounded-xl bg-burgundy hover:bg-burgundy-600 text-white font-semibold text-xs transition-all hover:scale-105"
+            </div>
+          ) : (
+            /* Tab 2: Interactive Terminal Shell */
+            <div className="space-y-3 font-mono text-xs">
+              <div className="p-5 rounded-2xl bg-charcoal text-canvas min-h-[240px] max-h-[320px] overflow-y-auto space-y-2 shadow-inner">
+                {cliLogs.map((log, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="whitespace-pre-wrap leading-relaxed"
                   >
-                    Execute
-                  </button>
-                </form>
+                    {log.startsWith("moazam@aws") ? (
+                      <span className="text-sand-300 font-bold">{log}</span>
+                    ) : log.startsWith("ACCESS GRANTED") ? (
+                      <span className="text-emerald-400 font-bold">{log}</span>
+                    ) : (
+                      <span className="text-slate-300">{log}</span>
+                    )}
+                  </motion.div>
+                ))}
+                <div ref={cliBottomRef} />
               </div>
-            )}
 
-          </div>
-        </Reveal>
+              <form onSubmit={handleCliSubmit} className="flex gap-2">
+                <div className="relative flex-1">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-burgundy font-bold">$</span>
+                  <input
+                    type="text"
+                    value={cliInput}
+                    onChange={(e) => setCliInput(e.target.value)}
+                    placeholder="Type 'help', 'aws s3 ls', or 'sudo hire-moazam'..."
+                    className="w-full bg-white border border-sand-200 rounded-xl pl-8 pr-4 py-2.5 text-xs text-charcoal placeholder-charcoal-soft focus:outline-none focus:border-burgundy font-mono transition-colors"
+                  />
+                </div>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  type="submit"
+                  className="btn-shimmer px-4 py-2.5 rounded-xl bg-burgundy hover:bg-burgundy-600 text-white font-semibold text-xs shadow-burgundy"
+                >
+                  Execute
+                </motion.button>
+              </form>
+            </div>
+          )}
+
+        </motion.div>
 
       </div>
     </section>

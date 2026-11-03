@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Cloud, GitBranch, ArrowRight, Zap, HardDrive, CheckCircle2, Globe, Cpu } from 'lucide-react';
-import Reveal from './Reveal';
 
 export default function AwsArchitecture() {
   const [activeStep, setActiveStep] = useState(0);
@@ -58,77 +58,115 @@ export default function AwsArchitecture() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <Reveal>
-          <div className="space-y-3 mb-14">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-100 text-burgundy text-xs font-mono font-semibold border border-sand-200">
-              <Cloud className="w-3.5 h-3.5" />
-              <span>04 // AWS Cloud Implementation</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
-              How This Portfolio Runs On AWS
-            </h2>
-            <p className="text-charcoal-muted text-sm sm:text-base max-w-2xl leading-relaxed">
-              Documenting the end-to-end cloud pipeline from code commit to global CloudFront edge delivery, aligned with the AWS Well-Architected Framework.
-            </p>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="space-y-3 mb-14"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-100 text-burgundy text-xs font-mono font-semibold border border-sand-200">
+            <Cloud className="w-3.5 h-3.5" />
+            <span>04 // AWS Cloud Implementation</span>
           </div>
-        </Reveal>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
+            How This Portfolio Runs On AWS
+          </h2>
+          <p className="text-charcoal-muted text-sm sm:text-base max-w-2xl leading-relaxed">
+            Documenting the end-to-end cloud pipeline from code commit to global CloudFront edge delivery, aligned with the AWS Well-Architected Framework.
+          </p>
+        </motion.div>
 
         {/* Architecture Panel */}
-        <Reveal delay={100}>
-          <div className="p-8 sm:p-10 rounded-3xl bg-white border border-sand-200 shadow-subtle space-y-8 relative">
-            
-            {/* Animated Traffic Track between nodes */}
-            <div className="hidden md:block relative h-1.5 bg-sand-100 rounded-full overflow-hidden mx-6">
-              <div className="absolute top-0 bottom-0 w-24 bg-gradient-to-r from-transparent via-burgundy to-transparent rounded-full animate-packet"></div>
-            </div>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.15 }}
+          className="p-8 sm:p-10 rounded-3xl bg-white border border-sand-200 shadow-subtle space-y-8 relative"
+        >
+          
+          {/* Animated Traffic Track with Moving Glowing Packet */}
+          <div className="hidden md:block relative h-2 bg-sand-100 rounded-full overflow-hidden mx-6">
+            <motion.div
+              animate={{
+                x: ["-10%", "110%"],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute top-0 bottom-0 w-28 bg-gradient-to-r from-transparent via-burgundy to-transparent rounded-full shadow-md shadow-burgundy/40"
+            />
+          </div>
 
-            {/* Nodes Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-              {architectureNodes.map((node, idx) => {
-                const Icon = node.icon;
-                const isActive = activeStep === idx;
-                return (
-                  <div
-                    key={node.id}
-                    onClick={() => setActiveStep(idx)}
-                    className={`p-5 rounded-2xl cursor-pointer transition-all duration-300 border flex flex-col justify-between group ${
-                      isActive
-                        ? 'bg-sand-50 border-burgundy shadow-elevated -translate-y-1'
-                        : 'bg-canvas border-sand-200 hover:border-sand-300 hover:-translate-y-0.5'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <div className={`p-2.5 rounded-xl transition-colors duration-300 ${
-                          isActive 
-                            ? 'bg-burgundy text-white shadow-burgundy' 
-                            : 'bg-sand-100 text-burgundy group-hover:bg-sand-200'
-                        }`}>
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        <span className="text-[10px] font-mono font-semibold text-burgundy">
-                          {node.metrics}
-                        </span>
-                      </div>
-                      <div className="font-bold text-xs text-charcoal group-hover:text-burgundy transition-colors">
-                        {node.title}
-                      </div>
-                      <div className="text-[11px] font-mono text-charcoal-muted mt-0.5">{node.awsBadge}</div>
-                    </div>
+          {/* Nodes Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+            {architectureNodes.map((node, idx) => {
+              const Icon = node.icon;
+              const isActive = activeStep === idx;
+              return (
+                <motion.div
+                  key={node.id}
+                  onClick={() => setActiveStep(idx)}
+                  whileHover={{ y: -6, scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className={`relative p-5 rounded-2xl cursor-pointer border flex flex-col justify-between group transition-colors duration-200 ${
+                    isActive
+                      ? 'border-burgundy bg-sand-50/80 shadow-elevated'
+                      : 'bg-canvas border-sand-200 hover:border-sand-300'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeArchStep"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      className="absolute inset-0 rounded-2xl border-2 border-burgundy pointer-events-none -z-0"
+                    />
+                  )}
 
-                    <div className="mt-4 pt-3 border-t border-sand-200 flex items-center justify-between text-[11px] text-charcoal-soft">
-                      <span>Inspect</span>
-                      <ArrowRight className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                        isActive ? 'text-burgundy translate-x-1' : 'group-hover:translate-x-0.5'
-                      }`} />
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`p-2.5 rounded-xl transition-colors duration-300 ${
+                        isActive 
+                          ? 'bg-burgundy text-white shadow-burgundy' 
+                          : 'bg-sand-100 text-burgundy group-hover:bg-sand-200'
+                      }`}>
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-mono font-semibold text-burgundy">
+                        {node.metrics}
+                      </span>
                     </div>
+                    <div className="font-bold text-xs text-charcoal group-hover:text-burgundy transition-colors">
+                      {node.title}
+                    </div>
+                    <div className="text-[11px] font-mono text-charcoal-muted mt-0.5">{node.awsBadge}</div>
                   </div>
-                );
-              })}
-            </div>
 
-            {/* Active Step Inspector with Fade Animation */}
-            <div className="p-6 rounded-2xl bg-canvas-subtle/70 border border-sand-200 flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300">
+                  <div className="mt-4 pt-3 border-t border-sand-200 flex items-center justify-between text-[11px] text-charcoal-soft relative z-10">
+                    <span>Inspect</span>
+                    <ArrowRight className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                      isActive ? 'text-burgundy translate-x-1' : 'group-hover:translate-x-0.5'
+                    }`} />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Active Step Inspector with AnimatePresence */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeStep}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35 }}
+              className="p-6 rounded-2xl bg-canvas-subtle/70 border border-sand-200 flex flex-col md:flex-row items-center justify-between gap-6"
+            >
               <div className="space-y-1.5 text-center md:text-left">
                 <div className="text-xs font-mono uppercase font-semibold text-burgundy flex items-center justify-center md:justify-start gap-2">
                   <span className="w-2 h-2 rounded-full bg-burgundy animate-ping"></span>
@@ -139,30 +177,33 @@ export default function AwsArchitecture() {
                 </p>
               </div>
 
-              <div className="px-4 py-2 rounded-xl bg-white border border-sand-200 text-xs font-mono text-charcoal flex items-center gap-2 shrink-0 shadow-sm">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="px-4 py-2 rounded-xl bg-white border border-sand-200 text-xs font-mono text-charcoal flex items-center gap-2 shrink-0 shadow-sm cursor-default"
+              >
                 <CheckCircle2 className="w-3.5 h-3.5 text-burgundy" />
                 <span>AWS Well-Architected</span>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
 
-            {/* Service Badges */}
-            <div className="pt-4 border-t border-sand-100 grid sm:grid-cols-3 gap-4 text-xs font-mono text-charcoal-muted">
-              <div className="flex items-center gap-2 hover:text-burgundy transition-colors">
-                <span className="w-2 h-2 rounded-full bg-burgundy"></span>
-                <span>Hosting: AWS Amplify Hosting</span>
-              </div>
-              <div className="flex items-center gap-2 hover:text-burgundy transition-colors">
-                <span className="w-2 h-2 rounded-full bg-sand-400"></span>
-                <span>Object Storage: Amazon S3</span>
-              </div>
-              <div className="flex items-center gap-2 hover:text-burgundy transition-colors">
-                <span className="w-2 h-2 rounded-full bg-charcoal"></span>
-                <span>CDN: Amazon CloudFront</span>
-              </div>
+          {/* Service Badges */}
+          <div className="pt-4 border-t border-sand-100 grid sm:grid-cols-3 gap-4 text-xs font-mono text-charcoal-muted">
+            <div className="flex items-center gap-2 hover:text-burgundy transition-colors cursor-default">
+              <span className="w-2 h-2 rounded-full bg-burgundy"></span>
+              <span>Hosting: AWS Amplify Hosting</span>
             </div>
-
+            <div className="flex items-center gap-2 hover:text-burgundy transition-colors cursor-default">
+              <span className="w-2 h-2 rounded-full bg-sand-400"></span>
+              <span>Object Storage: Amazon S3</span>
+            </div>
+            <div className="flex items-center gap-2 hover:text-burgundy transition-colors cursor-default">
+              <span className="w-2 h-2 rounded-full bg-charcoal"></span>
+              <span>CDN: Amazon CloudFront</span>
+            </div>
           </div>
-        </Reveal>
+
+        </motion.div>
 
       </div>
     </section>

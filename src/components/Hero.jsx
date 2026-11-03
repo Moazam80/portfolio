@@ -1,33 +1,19 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { ArrowRight, Shield, Cloud, CheckCircle2, Award, Sparkles } from 'lucide-react';
 import { personalInfo, stats } from '../data/portfolioData';
-import Reveal from './Reveal';
 
 export default function Hero() {
-  const cardRef = useRef(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    // Subtle tilt: max 6 degrees
-    setTilt({
-      x: -(y / (rect.height / 2)) * 6,
-      y: (x / (rect.width / 2)) * 6,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
-
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden editorial-bg">
       
-      {/* Luxury diagonal background accent */}
-      <div className="absolute top-0 right-0 w-1/3 h-full diagonal-accent pointer-events-none -z-10"></div>
+      {/* Luxury diagonal background accent with subtle pulse */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2 }}
+        className="absolute top-0 right-0 w-1/3 h-full diagonal-accent pointer-events-none -z-10"
+      />
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -36,104 +22,156 @@ export default function Hero() {
           {/* Left Column: Editorial Headline & CTAs */}
           <div className="lg:col-span-7 space-y-7 text-center lg:text-left">
             
-            {/* Top Pill with subtle glow */}
-            <Reveal delay={0}>
-              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-sand-100/90 border border-sand-200 text-burgundy text-xs font-mono shadow-sm hover:border-burgundy/30 transition-colors">
-                <span className="w-2 h-2 rounded-full bg-burgundy animate-ping"></span>
-                <span className="font-semibold tracking-wide">AWS Student Portfolio Challenge</span>
-                <span className="text-sand-300">/</span>
-                <span className="text-charcoal-muted">BZU Multan (CGPA 3.65)</span>
-              </div>
-            </Reveal>
+            {/* Top Pill with Spring Bounce */}
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 120 }}
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-sand-100/90 border border-sand-200 text-burgundy text-xs font-mono shadow-sm hover:border-burgundy/40 hover:shadow-subtle transition-all cursor-default"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-burgundy opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-burgundy"></span>
+              </span>
+              <span className="font-semibold tracking-wide">AWS Student Portfolio Challenge</span>
+              <span className="text-sand-300">/</span>
+              <span className="text-charcoal-muted">BZU Multan (CGPA 3.65)</span>
+            </motion.div>
 
-            {/* Editorial Headline */}
-            <Reveal delay={100}>
-              <div className="space-y-1">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal tracking-tight leading-[1.1]">
-                  Architecting <br />
-                  <span className="text-burgundy font-serif italic font-normal inline-block hover:scale-[1.02] transition-transform duration-300">
-                    Cloud Systems
-                  </span> <br />
-                  with Precision.
-                </h1>
-              </div>
-            </Reveal>
+            {/* Editorial Headline with Dynamic Cascading Reveal */}
+            <div className="space-y-1">
+              <motion.h1
+                initial={{ opacity: 0, y: 35 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal tracking-tight leading-[1.1]"
+              >
+                Architecting <br />
+                <motion.span
+                  whileHover={{ scale: 1.03, originX: 0 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="text-burgundy font-serif italic font-normal inline-block cursor-pointer"
+                >
+                  Cloud Systems
+                </motion.span> <br />
+                with Precision.
+              </motion.h1>
+            </div>
 
             {/* Subtitle */}
-            <Reveal delay={200}>
-              <p className="text-base sm:text-lg text-charcoal-muted leading-relaxed font-normal max-w-xl mx-auto lg:mx-0">
-                I am <strong className="text-charcoal font-semibold">Moazam Ali</strong>, a Computer Engineering student specializing in Linux administration, multi-tier containerization with Docker, and automated CI/CD pipelines on AWS.
-              </p>
-            </Reveal>
+            <motion.p
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="text-base sm:text-lg text-charcoal-muted leading-relaxed font-normal max-w-xl mx-auto lg:mx-0"
+            >
+              I am <strong className="text-charcoal font-semibold">Moazam Ali</strong>, a Computer Engineering student specializing in Linux administration, multi-tier containerization with Docker, and automated CI/CD pipelines on AWS.
+            </motion.p>
 
-            {/* Action Buttons */}
-            <Reveal delay={300}>
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-1">
-                <a
-                  href="#projects"
-                  className="btn-shimmer px-6 py-3.5 rounded-xl font-semibold text-white bg-burgundy hover:bg-burgundy-600 transition-all duration-300 shadow-burgundy hover:shadow-lg hover:-translate-y-1 flex items-center gap-2 group text-sm"
+            {/* Action Buttons with Spring Hover Physics */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-1"
+            >
+              <motion.a
+                href="#projects"
+                whileHover={{ scale: 1.05, y: -3 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                className="btn-shimmer px-6 py-3.5 rounded-xl font-semibold text-white bg-burgundy hover:bg-burgundy-600 transition-colors shadow-burgundy flex items-center gap-2 group text-sm"
+              >
+                <span>Explore Featured Projects</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />
+              </motion.a>
+
+              <motion.a
+                href="#about"
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                className="px-6 py-3.5 rounded-xl font-semibold text-charcoal hover:text-burgundy bg-white border border-sand-200 hover:border-burgundy/40 shadow-subtle text-sm transition-colors"
+              >
+                <span>About My Journey</span>
+              </motion.a>
+            </motion.div>
+
+            {/* Tech Badges Staggered */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.45 }}
+              className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs font-mono text-charcoal-muted"
+            >
+              <span className="text-sand-400 font-semibold uppercase tracking-wider">Core Tools:</span>
+              {["AWS Amplify", "Amazon S3", "Docker Compose", "Linux / Bash", "CI/CD"].map((tech, idx) => (
+                <motion.span
+                  key={tech}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.45 + idx * 0.08, type: "spring", stiffness: 200 }}
+                  whileHover={{ scale: 1.08, y: -2, borderColor: '#590907', color: '#590907' }}
+                  className="px-2.5 py-1 rounded-lg bg-white border border-sand-200 text-charcoal transition-colors cursor-pointer"
                 >
-                  <span>Explore Featured Projects</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
-                </a>
-
-                <a
-                  href="#about"
-                  className="px-6 py-3.5 rounded-xl font-semibold text-charcoal hover:text-burgundy bg-white border border-sand-200 hover:border-burgundy/40 transition-all duration-300 shadow-subtle hover:-translate-y-0.5 text-sm"
-                >
-                  <span>About My Journey</span>
-                </a>
-              </div>
-            </Reveal>
-
-            {/* Minimalist Tech Badges */}
-            <Reveal delay={400}>
-              <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs font-mono text-charcoal-muted">
-                <span className="text-sand-400 font-semibold uppercase tracking-wider">Core Tools:</span>
-                <span className="px-2.5 py-1 rounded-lg bg-white border border-sand-200 text-charcoal hover:border-burgundy/30 transition-colors">AWS Amplify</span>
-                <span className="px-2.5 py-1 rounded-lg bg-white border border-sand-200 text-charcoal hover:border-burgundy/30 transition-colors">Amazon S3</span>
-                <span className="px-2.5 py-1 rounded-lg bg-white border border-sand-200 text-charcoal hover:border-burgundy/30 transition-colors">Docker Compose</span>
-                <span className="px-2.5 py-1 rounded-lg bg-white border border-sand-200 text-charcoal hover:border-burgundy/30 transition-colors">Linux / Bash</span>
-                <span className="px-2.5 py-1 rounded-lg bg-white border border-sand-200 text-charcoal hover:border-burgundy/30 transition-colors">CI/CD</span>
-              </div>
-            </Reveal>
+                  {tech}
+                </motion.span>
+              ))}
+            </motion.div>
 
           </div>
 
-          {/* Right Column: Editorial Visual Portrait with Interactive 3D Tilt */}
+          {/* Right Column: Dynamic Floating Portrait Visual */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <Reveal delay={200}>
-              <div
-                ref={cardRef}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                style={{
-                  transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-                  transition: 'transform 0.15s ease-out',
-                }}
-                className="relative w-full max-w-[340px] sm:max-w-[380px] cursor-pointer group"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.88, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.2, type: "spring", bounce: 0.25 }}
+              className="relative w-full max-w-[340px] sm:max-w-[380px]"
+            >
+              
+              {/* Continuous Gentle Floating Motion on the Entire Card */}
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="relative"
               >
+                {/* Geometric Backdrop */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-sand-100 via-sand-200/60 to-sand-50 rounded-3xl -rotate-2 transform scale-95 border border-sand-200/80 shadow-subtle"></div>
                 
-                {/* Geometric Backdrop with gentle float */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-sand-100 via-sand-200/60 to-sand-50 rounded-3xl -rotate-2 transform scale-95 border border-sand-200/80 shadow-subtle group-hover:rotate-0 transition-transform duration-500"></div>
-                
-                {/* Burgundy glow behind cutout */}
-                <div className="absolute -top-3 -right-3 w-32 h-32 bg-burgundy/15 rounded-full blur-2xl pointer-events-none animate-pulse-glow"></div>
+                {/* Glowing Burgundy Halo Pulsing */}
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0.5, 0.25] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -top-4 -right-4 w-36 h-36 bg-burgundy/20 rounded-full blur-2xl pointer-events-none"
+                />
+
                 <div className="absolute bottom-4 left-0 right-0 h-24 bg-gradient-to-t from-canvas via-canvas/60 to-transparent z-10 pointer-events-none"></div>
 
-                {/* Main Portrait Card */}
-                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-sand-50/90 to-white/90 border border-sand-200 shadow-elevated p-2 group-hover:shadow-2xl transition-shadow duration-500">
+                {/* Main Portrait Card with Hover Spring */}
+                <motion.div
+                  whileHover={{ scale: 1.03, rotate: 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-sand-50/90 to-white/90 border border-sand-200 shadow-elevated p-2 group cursor-pointer"
+                >
                   <div className="relative rounded-2xl overflow-hidden bg-sand-100/40">
-                    <img
+                    <motion.img
+                      whileHover={{ scale: 1.04 }}
+                      transition={{ duration: 0.6 }}
                       src="/moazam-hero.png"
                       alt="Moazam Ali - Cloud & DevOps Engineer"
-                      className="w-full h-auto object-cover object-top drop-shadow-md group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                      className="w-full h-auto object-cover object-top drop-shadow-md"
                     />
                   </div>
-                </div>
+                </motion.div>
 
-                {/* Floating Badge 1: Top Right (Floats gently) */}
-                <div className="absolute -top-3 -left-4 z-20 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-sand-200 shadow-elevated flex items-center gap-2 animate-float">
+                {/* Floating Badge 1: Top Left (Dynamic Floating Counter-Motion) */}
+                <motion.div
+                  animate={{ y: [0, -8, 0], x: [0, 3, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.1 }}
+                  className="absolute -top-3 -left-4 z-20 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-sand-200 shadow-elevated flex items-center gap-2 cursor-pointer"
+                >
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
@@ -141,38 +179,50 @@ export default function Hero() {
                   <div className="text-[11px] font-mono font-semibold text-charcoal">
                     DevOps & Cloud Engineer
                   </div>
-                </div>
+                </motion.div>
 
-                {/* Floating Badge 2: Bottom Right (Floats gently with counter-phase) */}
-                <div className="absolute -bottom-3 -right-3 z-20 px-4 py-2 rounded-2xl bg-burgundy text-white shadow-burgundy flex items-center gap-2 animate-float-delayed hover:scale-105 transition-transform">
+                {/* Floating Badge 2: Bottom Right (Dynamic Floating Counter-Motion) */}
+                <motion.div
+                  animate={{ y: [0, 8, 0], x: [0, -3, 0] }}
+                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.1, rotate: -2 }}
+                  className="absolute -bottom-3 -right-3 z-20 px-4 py-2 rounded-2xl bg-burgundy text-white shadow-burgundy flex items-center gap-2 cursor-pointer"
+                >
                   <Award className="w-3.5 h-3.5 text-sand-200" />
                   <div className="text-[11px] font-mono font-semibold tracking-wide">
                     BZU Multan • 3.65 CGPA
                   </div>
-                </div>
+                </motion.div>
 
-              </div>
-            </Reveal>
+              </motion.div>
+
+            </motion.div>
           </div>
 
         </div>
 
-        {/* Minimalist Stats Strip with Staggered Reveal */}
+        {/* Minimalist Stats Strip with Spring Stagger and Hover Lift */}
         <div className="mt-20 pt-10 border-t border-sand-200/80 grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((s, idx) => (
-            <Reveal key={idx} delay={idx * 100}>
-              <div className="space-y-1 group p-3 rounded-xl hover:bg-sand-50/60 transition-colors duration-300">
-                <div className="text-2xl sm:text-3xl font-extrabold text-burgundy font-serif group-hover:scale-105 origin-left transition-transform duration-300">
-                  {s.value}
-                </div>
-                <div className="text-xs uppercase tracking-wider font-bold text-charcoal">
-                  {s.label}
-                </div>
-                <div className="text-xs text-charcoal-muted">
-                  {s.detail}
-                </div>
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.12, duration: 0.6, type: "spring", stiffness: 100 }}
+              whileHover={{ y: -6, scale: 1.03 }}
+              className="space-y-1 p-4 rounded-2xl bg-white/60 border border-sand-200/70 shadow-subtle hover:border-burgundy/30 hover:bg-white transition-all cursor-pointer"
+            >
+              <div className="text-2xl sm:text-3xl font-extrabold text-burgundy font-serif">
+                {s.value}
               </div>
-            </Reveal>
+              <div className="text-xs uppercase tracking-wider font-bold text-charcoal">
+                {s.label}
+              </div>
+              <div className="text-xs text-charcoal-muted">
+                {s.detail}
+              </div>
+            </motion.div>
           ))}
         </div>
 
