@@ -7,6 +7,8 @@ import Reveal from './Reveal';
 export default function Contact() {
   const [copied, setCopied] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
   const handleCopyEmail = () => {
@@ -15,10 +17,41 @@ export default function Contact() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
-    setFormSubmitted(true);
+    if (!formData.name || !formData.email || !formData.message || isSending) return;
+
+    setIsSending(true);
+    setSubmitError('');
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/moazamali517500@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `New Portfolio Inquiry from ${formData.name}`,
+          _template: 'table',
+          _captcha: 'true',
+        }),
+      });
+
+      const result = await response.json();
+      if (!response.ok || result.success !== 'true') {
+        throw new Error(result.message || 'Email service could not accept the message.');
+      }
+
+      setFormSubmitted(true);
+    } catch (error) {
+      setSubmitError('Your message could not be sent right now. Please try again or email me directly at ' + personalInfo.email + '.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -192,12 +225,19 @@ export default function Contact() {
                       ></textarea>
                     </div>
 
+                    {submitError && (
+                      <p role="alert" className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg p-3">
+                        {submitError}
+                      </p>
+                    )}
+
                     <button
                       type="submit"
-                      className="btn-shimmer w-full py-3.5 rounded-xl font-semibold text-white bg-burgundy hover:bg-burgundy-600 transition-all shadow-burgundy hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                      disabled={isSending}
+                      className="btn-shimmer w-full py-3.5 rounded-xl font-semibold text-white bg-burgundy hover:bg-burgundy-600 disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-burgundy hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
                     >
                       <Send className="w-4 h-4" />
-                      <span>Send Message</span>
+                      <span>{isSending ? 'Sending...' : 'Send Message'}</span>
                     </button>
                   </form>
                 )}
