@@ -16,6 +16,13 @@ export default function Navbar({ onOpenSuperpower }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navigateToSection = (event, href) => {
+    event.preventDefault();
+    const target = document.querySelector(href);
+    setMobileMenuOpen(false);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const navLinks = [
     { name: "About", href: "#about" },
     { name: "Skills", href: "#skills" },
@@ -67,6 +74,7 @@ export default function Navbar({ onOpenSuperpower }) {
               <motion.a
                 key={link.name}
                 href={link.href}
+                onClick={(event) => navigateToSection(event, link.href)}
                 whileHover={{ y: -2, color: '#590907' }}
                 transition={{ type: "spring", stiffness: 300 }}
                 className="text-xs uppercase tracking-wider font-semibold text-charcoal-muted px-3.5 py-2 rounded-lg hover:bg-sand-100/60 transition-colors"
@@ -139,7 +147,7 @@ export default function Navbar({ onOpenSuperpower }) {
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(event) => navigateToSection(event, link.href)}
                   className="text-xs uppercase tracking-wider font-semibold text-charcoal p-2.5 rounded-lg hover:bg-sand-100 transition-colors"
                 >
                   {link.name}
