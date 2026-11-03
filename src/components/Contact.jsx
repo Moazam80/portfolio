@@ -41,14 +41,18 @@ export default function Contact() {
         }),
       });
 
-      const result = await response.json();
-      if (!response.ok || result.success !== 'true') {
-        throw new Error(result.message || 'Email service could not accept the message.');
+      const result = await response.json().catch(() => ({}));
+      const accepted = result.success === true || result.success === 'true';
+
+      if (!response.ok || !accepted) {
+        throw new Error(result.message || result.error || `Email service returned status ${response.status}. Check FormSubmit email activation.`);
       }
 
       setFormSubmitted(true);
+      setFormData({ name: '', email: '', message: '' });
     } catch (error) {
-      setSubmitError('Your message could not be sent right now. Please try again or email me directly at ' + personalInfo.email + '.');
+      console.error('Portfolio contact form error:', error);
+      setSubmitError(`Email delivery failed: ${error.message || 'Unknown error'}. You can also email me directly at ${personalInfo.email}.`);
     } finally {
       setIsSending(false);
     }
