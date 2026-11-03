@@ -28,7 +28,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden editorial-bg">
+    <section className="relative pt-24 pb-14 md:pt-28 md:pb-16 overflow-hidden editorial-bg">
       
       {/* Luxury diagonal ambient aura */}
       <motion.div
@@ -44,10 +44,10 @@ export default function Hero() {
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-7 items-center">
           
           {/* Left Column: Editorial Headline & CTAs */}
-          <div className="lg:col-span-7 space-y-7 text-center lg:text-left">
+          <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
             
             {/* Top Status & Track Pill with Spring Entrance */}
             <motion.div
@@ -73,7 +73,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal tracking-tight leading-[1.12]"
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-charcoal tracking-tight leading-[1.12]"
               >
                 Architecting <br />
                 <motion.span
@@ -112,7 +112,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="text-base sm:text-lg text-charcoal-muted leading-relaxed font-normal max-w-xl mx-auto lg:mx-0"
+              className="text-sm sm:text-base text-charcoal-muted leading-relaxed font-normal max-w-xl mx-auto lg:mx-0"
             >
               I am <strong className="text-charcoal font-semibold">Moazam Ali</strong>, a Computer Engineering student at BZU Multan. I bridge application development and production operations through Linux administration, multi-tier Docker containerization, and automated AWS CI/CD pipelines.
             </motion.p>
@@ -198,7 +198,7 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.88, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.2, type: "spring", bounce: 0.25 }}
-              className="relative w-full max-w-[340px] sm:max-w-[380px]"
+              className="relative w-full max-w-[280px] sm:max-w-[310px] lg:max-w-[320px]"
             >
               
               {/* Continuous Gentle Floating Motion on the Entire Frame */}
@@ -214,7 +214,7 @@ export default function Hero() {
                 <motion.div
                   animate={{ scale: [1, 1.25, 1], opacity: [0.25, 0.55, 0.25] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-4 -right-4 w-40 h-40 bg-burgundy/20 rounded-full blur-2xl pointer-events-none"
+                  className="absolute -top-4 -right-4 w-32 h-32 bg-burgundy/25 rounded-full blur-2xl pointer-events-none"
                 />
 
                 <div className="absolute bottom-4 left-0 right-0 h-24 bg-gradient-to-t from-canvas via-canvas/60 to-transparent z-10 pointer-events-none"></div>
@@ -223,7 +223,7 @@ export default function Hero() {
                 <motion.div
                   whileHover={{ scale: 1.03, rotate: 1 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-sand-50/95 to-white/95 border border-sand-200 shadow-elevated p-2 group cursor-pointer"
+                  className="relative rounded-[2rem] overflow-hidden bg-gradient-to-br from-white via-sand-50 to-sand-100 border-2 border-white shadow-[0_24px_70px_-24px_rgba(89,9,7,0.35)] ring-1 ring-burgundy/15 p-2.5 group cursor-pointer"
                 >
                   <div className="relative rounded-2xl overflow-hidden bg-sand-100/40">
                     <motion.img
@@ -231,7 +231,7 @@ export default function Hero() {
                       transition={{ duration: 0.6 }}
                       src="/moazam-hero.png"
                       alt="Moazam Ali - Cloud & DevOps Engineer"
-                      className="w-full h-auto object-cover object-top drop-shadow-md"
+                      className="w-full max-h-[390px] object-cover object-top drop-shadow-md"
                     />
                   </div>
                 </motion.div>
@@ -284,7 +284,7 @@ export default function Hero() {
         </div>
 
         {/* Minimalist Stats Strip with Spring Stagger and Hover Lift */}
-        <div className="mt-20 pt-10 border-t border-sand-200/80 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mt-14 pt-7 border-t border-sand-200/80 grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((s, idx) => (
             <motion.div
               key={idx}
